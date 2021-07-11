@@ -1,0 +1,7 @@
+---
+
+- name: 'Install mariadb'
+  include_tasks: 'components.yml'
+
+- name: 'Configure mariadb'
+  include_tasks: 'configure.yml'
