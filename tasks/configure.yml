@@ -1,0 +1,27 @@
+---
+
+- name: 'Create a database'
+  mysql_db:
+    login_unix_socket: '{{ socket_path }}'
+    name: '{{ db_name }}'
+    state: 'present'
+
+- name: 'Create a user'
+  mysql_user: 
+    login_unix_socket: '{{ socket_path }}'
+    name: '{{ db_user }}'
+    password: '{{ db_pass }}'
+    host: "%"
+    priv: '*.*:ALL,GRANT'
+    state: 'present'
+
+# - name: 'Remove default config' 
+#   file:
+#     path: '/etc/mysql/mariadb.conf.d/50-server.cnf'
+#     state: 'absent'
+    
+- name: 'Replace config' 
+  template:
+    src: '50-server.cnf.j2'
+    dest: '/etc/mysql/mariadb.conf.d/50-server.cnf'
+  notify: 'Restart MariaDB'
